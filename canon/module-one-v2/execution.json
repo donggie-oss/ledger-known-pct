@@ -1,0 +1,17 @@
+{
+  "module": "module_one_v2",
+  "datasets": {
+    "STRUCTURAL_CORE": {
+      "min_facts_to_measure": 1
+    },
+    "EXCEPTION_SURFACE": {
+      "min_facts_to_measure": 0
+    },
+    "STRAIN_FACTORS": {
+      "min_facts_to_measure": 0
+    },
+    "GOVERNANCE_SIGNAL": {
+      "min_facts_to_measure": 0
+    }
+  }
+}
