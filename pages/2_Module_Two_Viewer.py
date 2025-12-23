@@ -4,6 +4,7 @@ import streamlit as st
 
 
 st.title("Module Two — Decision Viewer")
+st.caption("Viewer-only. No execution. Decisions are computed upstream.")
 st.caption("Canon-bound. Read-only. No execution.")
 
 REQUIRED_COLS = {
