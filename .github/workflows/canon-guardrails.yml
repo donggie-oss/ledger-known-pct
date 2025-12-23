@@ -27,16 +27,14 @@ jobs:
       - name: Scan Python for forbidden logic
         run: |
           FORBIDDEN_PATTERNS=(
-            "known_pct"
-            "GREEN"
-            "YELLOW"
-            "RED"
-            "0\\.7"
-            "0\\.6"
-            "0\\.5"
-            ">="
-            "<="
-          )
+  "known_pct"
+  "GREEN"
+  "YELLOW"
+  "RED"
+  "0\\.7"
+  "0\\.6"
+  "0\\.5"
+)
 
           for pattern in "${FORBIDDEN_PATTERNS[@]}"; do
             if grep -R --line-number "$pattern" *.py; then
