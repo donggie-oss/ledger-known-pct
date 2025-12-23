@@ -1,141 +1,103 @@
-# Ledger → Known% Calculator
+# ledger-known-pct
 
-## What this is
-This repository contains a standalone Streamlit application that converts an explicit evidence ledger into deterministic Known% / Unknown% outputs for the following datasets:
+## Status
+**ACTIVE · CANON-BOUND · EXECUTION ONLY**
 
-- STRUCTURAL  
-- COMPLEXITY  
-- STRAIN  
+This repository implements **Forge GTM Module One execution** and its supporting UI.
+It is **not** a place for theory, experimentation, or ad‑hoc logic.
 
-The tool is designed to safely feed Module One adjudication without contaminating it with interpretation, inference, or heuristics.
-
----
-
-## What this tool does
-- Reads an evidence ledger from CSV
-- Applies fixed, transparent weighting rules
-- Computes Known% as evidence coverage, not confidence
-- Outputs auditable results per entity and dataset
-- Exports results as CSV for downstream use
-
-Everything is deterministic.  
-If you run the same ledger twice, you get the same answer.
+If it is not defined in **canon**, it does not belong here.
 
 ---
 
-## What this tool explicitly does NOT do
-This tool does not:
-- Interpret language
-- Parse free text
-- Guess intent
-- Infer meaning
-- Perform NLP
-- Assign confidence heuristically
-- Make PURSUE / PARK / DISCARD decisions
+## What This Repo Is
+- An **execution surface** for Module One
+- A **viewer UI** for adjudication outputs
+- A **runner** that consumes canon and produces artifacts
 
-If you are looking for “smart scoring” or “AI insights,” this is the wrong tool.
-
----
-
-## Why this exists
-Module One adjudication must never:
-- read raw text
-- invent evidence
-- silently smooth gaps
-- confuse uncertainty with confidence
-
-This calculator creates a hard mechanical boundary between:
-- human judgment (upstream research)
-- and automated decision grammar (Module One)
-
-Known% answers only one question:
-How much do we explicitly know, based on declared evidence?
+## What This Repo Is NOT
+- Not a design document
+- Not a playground
+- Not a place to redefine rules
+- Not a sales tool
 
 ---
 
-## Evidence Ledger Schema (Required)
+## Canonical Source of Truth
 
-The input CSV must contain the following columns exactly:
+All logic is defined externally in **canon**.
 
-| Column | Description | Allowed Values |
-|------|------------|----------------|
-| entity_id | Stable account identifier | string |
-| dataset | Evidence category | STRUCTURAL, COMPLEXITY, STRAIN |
-| source_tier | Source credibility tier | 1, 2, 3, 4 |
-| signal_strength | Strength of signal | STRONG, WEAK |
-| date_observed | Observation date | YYYY-MM-DD |
-| valid | Explicit validity flag | true, false |
+```
+/canon
+  /module-one-v2
+    execution.md
+    execution.json
+  /module-two
+    logic.md
+    logic.json
+```
 
-Invalid or malformed rows are ignored, not corrected.
+Rules:
+- Python **must consume canon**
+- Python **must not embed thresholds**
+- UI **must not adjudicate**
 
----
-
-## Deterministic Rules (Summary)
-
-### Source tier weights
-- Tier 1 → 1.00  
-- Tier 2 → 0.75  
-- Tier 3 → 0.50  
-- Tier 4 → 0.25  
-
-### Signal strength multipliers
-- STRONG → 1.00  
-- WEAK → 0.60  
-
-### Freshness multipliers
-- < 12 months → 1.00  
-- 12–24 months → 0.70  
-- 24–36 months → 0.40  
-- > 36 months → excluded  
-
-### Required coverage (per dataset)
-- STRUCTURAL → 2.50  
-- COMPLEXITY → 2.00  
-- STRAIN → 1.75  
-
-Known% = min(1.0, total_weight / required_weight)
+Any deviation is a canon violation.
 
 ---
 
-## Running the app (recommended)
-This app is intended to be run on Streamlit Community Cloud.
+## Repository Structure (Enforced)
 
-1. Deploy this repository via Streamlit Cloud
-2. Open the app in your browser
-3. Upload your evidence ledger CSV
-4. Select the “as-of” date
-5. Click Run Known% Calculation
-6. Download the results CSV
-
-No local Python installation is required.
+```
+/canon          # Read-only doctrine (JSON + MD)
+/engine         # Pure executors (no logic definition)
+/ui             # Streamlit viewer only
+/examples       # Sample inputs only
+/artifacts      # Generated outputs only
+```
 
 ---
 
-## Output
-The app outputs one row per:
-- entity
-- dataset
+## Execution Flow
 
-With the following fields:
-- known_pct
-- unknown_pct
-- raw_weight
-- required_weight
-
-These outputs are designed to be consumed directly by Module One adjudication.
-
----
-
-## Design philosophy
-This tool is intentionally:
-- strict
-- boring
-- unforgiving
-
-Those are features, not limitations.
+1. **Canon is authored or updated** (outside this repo)
+2. Canon JSON is placed under `/canon`
+3. Engine scripts:
+   - Read canon
+   - Execute adjudication
+   - Emit artifacts
+4. Streamlit UI:
+   - Renders artifacts
+   - Never decides outcomes
 
 ---
 
-## License / usage
-Internal operational tool.  
-Use only with explicit evidence ledgers and trained operators.
+## Guardrails
+
+- No GREEN/YELLOW/RED logic unless defined in canon
+- No `known_pct` thresholds unless defined in canon
+- No UI-side branching
+- No silent logic changes
+
+If you need to change behavior:
+1. Update canon
+2. Version canon
+3. Re-run engine
+
+---
+
+## Contribution Rules
+
+- All PRs are reviewed for **canon compliance**
+- Logic embedded in Python = automatic rejection
+- UI changes must not affect execution
+
+---
+
+## Operating Principle
+
+> **Execution before explanation.  
+> Measurement before decision.  
+> Canon before code.**
+
+Forge GTM standard.
