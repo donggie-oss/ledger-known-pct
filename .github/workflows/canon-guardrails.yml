@@ -1,0 +1,81 @@
+name: Canon Guardrails
+
+on:
+  pull_request:
+  push:
+    branches: [ main ]
+
+jobs:
+  canon-check:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repo
+        uses: actions/checkout@v4
+
+      # -------------------------------------------------
+      # 1. Ensure canon files exist
+      # -------------------------------------------------
+      - name: Verify canon presence
+        run: |
+          test -f canon/module-one-v2/execution.json || (echo "Missing Module One canon" && exit 1)
+          test -f canon/module-two/logic.json || (echo "Missing Module Two canon" && exit 1)
+
+      # -------------------------------------------------
+      # 2. Block forbidden terms in Python (logic drift)
+      # -------------------------------------------------
+      - name: Scan Python for forbidden logic
+        run: |
+          FORBIDDEN_PATTERNS=(
+            "known_pct"
+            "GREEN"
+            "YELLOW"
+            "RED"
+            "0\\.7"
+            "0\\.6"
+            "0\\.5"
+            ">="
+            "<="
+          )
+
+          for pattern in "${FORBIDDEN_PATTERNS[@]}"; do
+            if grep -R --line-number "$pattern" *.py; then
+              echo "Forbidden logic detected: $pattern"
+              exit 1
+            fi
+          done
+
+      # -------------------------------------------------
+      # 3. Enforce Streamlit as viewer-only
+      # -------------------------------------------------
+      - name: Enforce Streamlit viewer-only rule
+        run: |
+          if grep -R "load_canon" streamlit_app.py; then
+            echo "Streamlit must not load canon"
+            exit 1
+          fi
+
+          if grep -R "execute_module" streamlit_app.py; then
+            echo "Streamlit must not execute logic"
+            exit 1
+          fi
+
+      # -------------------------------------------------
+      # 4. Prevent hardcoded thresholds in UI or engine
+      # -------------------------------------------------
+      - name: Block hardcoded thresholds
+        run: |
+          if grep -R --line-number -E "[0-9]+\\.[0-9]+" *.py; then
+            echo "Numeric thresholds detected in Python"
+            exit 1
+          fi
+
+      # -------------------------------------------------
+      # 5. Canon is allowed to change freely
+      # -------------------------------------------------
+      - name: Canon changes allowed
+        run: |
+          echo "Canon files are authoritative. Changes permitted."
+
+      - name: Guardrails passed
+        run: echo "Canon guardrails passed successfully."
