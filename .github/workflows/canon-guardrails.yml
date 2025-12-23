@@ -26,15 +26,7 @@ jobs:
       # -------------------------------------------------
       - name: Scan Python for forbidden logic
         run: |
-          FORBIDDEN_PATTERNS=(
-  "known_pct"
-  "GREEN"
-  "YELLOW"
-  "RED"
-  "0\\.7"
-  "0\\.6"
-  "0\\.5"
-)
+          FORBIDDEN_PATTERNS=("known_pct" "GREEN" "YELLOW" "RED" "0\.7" "0\.6" "0\.5")
 
           for pattern in "${FORBIDDEN_PATTERNS[@]}"; do
             if grep -R --line-number "$pattern" *.py; then
@@ -63,7 +55,7 @@ jobs:
       # -------------------------------------------------
       - name: Block hardcoded thresholds
         run: |
-          if grep -R --line-number -E "[0-9]+\\.[0-9]+" *.py; then
+          if grep -R --line-number -E "[0-9]+\.[0-9]+" *.py; then
             echo "Numeric thresholds detected in Python"
             exit 1
           fi
