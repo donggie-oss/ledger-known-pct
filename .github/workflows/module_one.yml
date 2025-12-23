@@ -1,0 +1,31 @@
+name: Module One Adjudication
+
+on:
+  workflow_dispatch:
+
+jobs:
+  adjudicate:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repo
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.10"
+
+      - name: Install dependencies
+        run: |
+          pip install pandas
+
+      - name: Run Module One
+        run: |
+          python module_one_assigner.py
+
+      - name: Upload results
+        uses: actions/upload-artifact@v4
+        with:
+          name: module_one_states
+          path: module_one_states.csv
