@@ -4,6 +4,7 @@ import streamlit as st
 
 
 st.title("Module One v2 — Execution Viewer")
+st.caption("Viewer-only. No execution. No adjudication. Canon-bound output display.")
 st.caption("Canon-bound. Read-only. No adjudication.")
 
 REQUIRED_COLS = {
