@@ -1,0 +1,11 @@
+{
+  "module": "module_two",
+  "rules": {
+    "required_measurements": [
+      "STRUCTURAL_CORE_measured",
+      "STRAIN_FACTORS_measured",
+      "GOVERNANCE_SIGNAL_measured"
+    ],
+    "max_exception_surface": 2
+  }
+}
