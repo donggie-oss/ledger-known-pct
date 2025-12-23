@@ -2,7 +2,6 @@ import io
 import pandas as pd
 import streamlit as st
 
-st.set_page_config(page_title="Module One Viewer", layout="wide")
 
 st.title("Module One v2 — Execution Viewer")
 st.caption("Canon-bound. Read-only. No adjudication.")
